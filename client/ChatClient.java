@@ -88,7 +88,20 @@ public class ChatClient extends AbstractClient
       closeConnection();
     }
     catch(IOException e) {}
+    
     System.exit(0);
+  }
+
+  @Override
+  protected void connectionClosed() {
+
+	  System.out.println("The server is disconnected.");
+  	}
+
+  @Override
+  public void connectionException(Exception exception) {
+
+	  System.out.println("The server ???.");
   }
 }
 //End of ChatClient class
