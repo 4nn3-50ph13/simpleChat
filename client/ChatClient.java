@@ -66,6 +66,11 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromClientUI(String message)
   {
+
+	  if (message.contains("#")){
+		  getCommand(message.substring(message.indexOf('#')));
+	  }
+	  
     try
     {
       sendToServer(message);
@@ -102,6 +107,54 @@ public class ChatClient extends AbstractClient
   public void connectionException(Exception exception) {
 
 	  System.out.println("The server ???.");
+  }
+  
+  private void getCommand(String message){
+	  
+	  String command = message;
+	  if(command.contains(" ")) {
+		  command = command.split(" ")[0];
+		  treatCommand(command, command.split(" ")[1]);
+		  message = message.substring(message.indexOf(" "+1));
+		  if (message.contains("#")) {
+			  getCommand(message.substring(message.indexOf("#")));
+		  }
+	  }
+  }
+  
+  private void treatCommand(String command, String message) {
+	  if(command.equals("quit")) {
+		  quit();
+	  } else if(command.equals("logoff")) {
+		  try
+		    {
+		      closeConnection();
+		    }
+		    catch(IOException e) {}
+		    
+	  } else if(command.equals("sethost")) {
+		    if(!isConnected()) {
+		    	setHost(message);
+		    } else {
+		    	System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOON grrr");
+		    }
+	  } else if(command.equals("setport")) {
+		  if(!isConnected()) {
+		    	setPort(Integer.parseInt(message));
+		    } else {
+		    	System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOON grrr");
+		    }
+	  } else if(command.equals("login")) {
+		  try {
+			openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	  } else if(command.equals("gethost")) {
+		  System.out.println(getHost());
+	  } else if(command.equals("getport")) {
+		  System.out.println(getHost());
+	  }
   }
 }
 //End of ChatClient class
