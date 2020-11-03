@@ -18,24 +18,18 @@ import common.*;
  * @author Dr Robert Lagani&egrave;re
  * @version September 2020
  */
-public class ClientConsole implements ChatIF 
-{
+public class ClientConsole implements ChatIF {
   //Class variables *************************************************
-  
   /**
    * The default port to connect on.
    */
   final public static int DEFAULT_PORT = 5555;
   
   //Instance variables **********************************************
-  
   /**
    * The instance of the client that created this ConsoleChat.
    */
   ChatClient client;
-  
-  
-  
   /**
    * Scanner to read from the console
    */
@@ -78,22 +72,23 @@ public class ClientConsole implements ChatIF
    */
   public void accept() 
   {
-    try
-    {
+	  try
+	    {
 
-      String message;
+	      String message;
 
-      while (true) 
-      {
-        message = fromConsole.nextLine();
-        client.handleMessageFromClientUI(message);
-      }
-    } 
-    catch (Exception ex) 
-    {
-      System.out.println
-        ("Unexpected error while reading from console!");
-    }
+	      while (true) 
+	      {
+	        message = fromConsole.nextLine();
+	        client.handleMessageFromClientUI(message);
+	      }
+	    } 
+	    catch (Exception ex) 
+	    {
+	      System.out.println
+	        ("Unexpected error while reading from console!");
+	    }
+    
   }
 
   /**
@@ -115,10 +110,10 @@ public class ClientConsole implements ChatIF
    *
    * @param args[0] The host to connect to.
    */
-  public static void main(String[] args) 
+  public static void main(String[] args)
   {
     String host = "";
-
+    int port;
 
     try
     {
@@ -128,8 +123,18 @@ public class ClientConsole implements ChatIF
     {
       host = "localhost";
     }
-    ClientConsole chat= new ClientConsole(host, DEFAULT_PORT);
+    try
+    {
+      port = Integer.parseInt(args[1]);
+    }
+    catch(ArrayIndexOutOfBoundsException e)
+    {
+      port = DEFAULT_PORT;
+    }
+    ClientConsole chat= new ClientConsole(host, port);
     chat.accept();  //Wait for console data
   }
+  
+  
 }
 //End of ConsoleChat class
