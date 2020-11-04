@@ -29,7 +29,7 @@ public class ClientConsole implements ChatIF {
   /**
    * The instance of the client that created this ConsoleChat.
    */
-  ChatClient client;
+  static ChatClient client;
   /**
    * Scanner to read from the console
    */
@@ -44,11 +44,11 @@ public class ClientConsole implements ChatIF {
    * @param host The host to connect to.
    * @param port The port to connect on.
    */
-  public ClientConsole(String host, int port) 
+  public ClientConsole(String loginID, String host, int port) 
   {
     try 
     {
-      client= new ChatClient(host, port, this);
+      client= new ChatClient(loginID, host, port, this);
       
       
     } 
@@ -110,28 +110,36 @@ public class ClientConsole implements ChatIF {
    *
    * @param args[0] The host to connect to.
    */
-  public static void main(String[] args)
-  {
+  public static void main(String[] args){
+	String loginID = null;
     String host = "";
     int port;
+    Scanner logID = new Scanner(System.in); 
 
-    try
-    {
-      host = args[0];
+    try{
+    	loginID = logID.nextLine();
+    	if(loginID.length() > 6 && loginID.substring(0, 6).equals("#login") ) {
+    		loginID = loginID.substring(6);
+    	} else {
+    		client.quit();
+    	}
     }
-    catch(ArrayIndexOutOfBoundsException e)
-    {
-      host = "localhost";
+    catch(ArrayIndexOutOfBoundsException e){
+      client.quit();
     }
-    try
-    {
-      port = Integer.parseInt(args[1]);
+    try{
+      port = Integer.parseInt(args[0]);
     }
-    catch(ArrayIndexOutOfBoundsException e)
-    {
+    catch(ArrayIndexOutOfBoundsException e){
       port = DEFAULT_PORT;
     }
-    ClientConsole chat= new ClientConsole(host, port);
+    try{
+    	host = args[1];
+      }
+      catch(ArrayIndexOutOfBoundsException e){
+    	host = "localhost";
+      }
+    ClientConsole chat= new ClientConsole(loginID, host, port);
     chat.accept();  //Wait for console data
   }
   

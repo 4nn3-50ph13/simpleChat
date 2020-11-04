@@ -108,10 +108,64 @@ public class EchoServer extends AbstractServer
   protected void clientConnected(ConnectionToClient client) {
 	  System.out.println("Client connected : " + client.getName());
   }
+
   @Override
   synchronized protected void clientDisconnected(ConnectionToClient client) {
 	  System.out.println("Client disconnected : " + client.getName());
   }
 
+
+  protected void getCommand(String message){
+	  
+	  String command = message;
+	  if(command.contains(" ")) {
+		  command = command.split(" ")[0];
+		  treatCommand(command, command.split(" ")[1]);
+		  message = message.substring(message.indexOf(" "+1));
+		  if (message.contains("#")) {
+			  getCommand(message.substring(message.indexOf("#")));
+		  }
+	  } else {
+		  treatCommand(command, null);
+	  }
+  }
+  
+  private void treatCommand(String command, String message) {
+	  if(command.equals("#quit")) {
+		  try
+		    {
+		      close();
+		    }
+		    catch(IOException e) {}
+		    
+		    System.exit(0);
+	  } else if(command.equals("#stop")) {
+		  stopListening();
+		   
+	  } else if(command.equals("#close")) {
+		  try
+		    {
+		      close();
+		      
+		    }
+		    catch(IOException e) {}
+	  } else if(command.equals("#setport")) {
+		  if(getNumberOfClients() == 0 && message != null) {
+		    	setPort(Integer.parseInt(message));
+		    } else {
+		    	System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOON grrr");
+		    }
+	  } else if(command.equals("#start")) {
+		  try {
+			  if (!isListening()) {
+				  listen();
+			  }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	  } else if(command.equals("#getport")) {
+			System.out.println(getPort());
+	  }
+  }
 }
 //End of EchoServer class

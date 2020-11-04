@@ -36,6 +36,9 @@ public class ServerConsole implements ChatIF{
 		      while (true) 
 		      {
 		        message = fromConsole.nextLine();
+		        if(message.contains("#")) {
+		        	server.getCommand(message);
+		        }
 		        server.sendToAllClients("SERVER MSG>"+message);
 		        display(message);
 		      }
