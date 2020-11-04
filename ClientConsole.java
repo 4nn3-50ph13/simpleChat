@@ -79,8 +79,6 @@ public class ClientConsole implements ChatIF {
 	      String message = "";
 
 	      while (true) {
-	    	  System.out.println("I am true");
-		      System.out.println("message : "+message);
 	        message = fromConsole.nextLine();
 	        client.handleMessageFromClientUI(message);
 	      }
@@ -119,32 +117,32 @@ public class ClientConsole implements ChatIF {
     
     try{
     	loginID = args[0];
-		System.out.println("log in as "+loginID);
-    	if(loginID.length() > 6 && loginID.substring(0, 6).equals("#login") ) {
-    		loginID = loginID.substring(6);
-    		System.out.println("You are logged in as "+loginID);
-    	} else {
-    		System.out.println("ERROR - No login ID specified. Connection aborted.");
-    	    System.out.println("Please enter your login ID");
-    		System.exit(1);
-    	}
+    	System.out.println("You are logged in as "+loginID);
     } catch(ArrayIndexOutOfBoundsException e){
 		System.out.println("ERROR - No login ID specified. Connection aborted.");
-	    System.out.println("Please enter your login ID");
 		System.exit(1);
     }
     try{
-      port = Integer.parseInt(args[1]);
+    	host = args[1];
+    	System.out.println("On server "+host);
     }
-    catch(ArrayIndexOutOfBoundsException e){
-      port = DEFAULT_PORT;
+    catch(ArrayIndexOutOfBoundsException e){System.out.println("Cannot open connection. Awaiting command.");
+	  Scanner serverHost = new Scanner(System.in);
+	  String serverCommand = "";
+	  while(!serverCommand.contains("#setHost")) {
+		  serverCommand = serverHost.nextLine();
+		  System.out.println("Cannot open connection. Awaiting command.");
+	  }
+	  serverHost.close();
+	  host = serverCommand.substring(8);
     }
     try{
-    	host = args[2];
-      }
-      catch(ArrayIndexOutOfBoundsException e){
-    	host = "localhost";
-      }
+      port = Integer.parseInt(args[2]);
+    }
+    catch(ArrayIndexOutOfBoundsException e){
+	  
+      port = DEFAULT_PORT;
+    }
     ClientConsole chat= new ClientConsole(loginID, host, port);
     chat.accept();  //Wait for console data
   }
