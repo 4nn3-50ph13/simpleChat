@@ -62,23 +62,22 @@ public class ChatClient extends AbstractClient
    *
    * @param message The message from the UI.    
    */
-  public void handleMessageFromClientUI(String message)
-  {
+  public void handleMessageFromClientUI(String message) {
 
 	  if (message.contains("#")){
 		  getCommand(message.substring(message.indexOf('#')));
 	  }
-	  
-    try
-    {
-      sendToServer(message);
-    }
-    catch(IOException e)
-    {
-      clientUI.display
-        ("Could not send message to server.  Terminating client.");
-      quit();
-    }
+	  if (!(message==null||message.equals(""))) {
+		  try
+		    {
+		      sendToServer(message);
+		    }
+		  catch(IOException e)
+		    {
+		      clientUI.display("Could not send message to server.  Terminating client.");
+		      quit();
+		    }
+	  }
   }
   
   /**

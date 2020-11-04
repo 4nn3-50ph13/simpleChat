@@ -25,6 +25,7 @@ public class ClientConsole implements ChatIF {
    */
   final public static int DEFAULT_PORT = 5555;
   
+  
   //Instance variables **********************************************
   /**
    * The instance of the client that created this ConsoleChat.
@@ -75,18 +76,18 @@ public class ClientConsole implements ChatIF {
 	  try
 	    {
 
-	      String message;
+	      String message = "";
 
-	      while (true) 
-	      {
+	      while (true) {
+	    	  System.out.println("I am true");
+		      System.out.println("message : "+message);
 	        message = fromConsole.nextLine();
 	        client.handleMessageFromClientUI(message);
 	      }
 	    } 
 	    catch (Exception ex) 
 	    {
-	      System.out.println
-	        ("Unexpected error while reading from console!");
+	      System.out.println("Unexpected error while reading from console!\n"+ex.getLocalizedMessage());
 	    }
     
   }
@@ -115,29 +116,31 @@ public class ClientConsole implements ChatIF {
     String host = "";
     int port;
     
-    System.out.println("Please enter your login ID");
-    Scanner logID = new Scanner(System.in); 
-
+    
     try{
-    	loginID = logID.nextLine();
+    	loginID = args[0];
+		System.out.println("log in as "+loginID);
     	if(loginID.length() > 6 && loginID.substring(0, 6).equals("#login") ) {
     		loginID = loginID.substring(6);
+    		System.out.println("You are logged in as "+loginID);
     	} else {
-    		client.quit();
+    		System.out.println("ERROR - No login ID specified. Connection aborted.");
+    	    System.out.println("Please enter your login ID");
+    		System.exit(1);
     	}
-    	logID.close();
-    }
-    catch(ArrayIndexOutOfBoundsException e){
-      client.quit();
+    } catch(ArrayIndexOutOfBoundsException e){
+		System.out.println("ERROR - No login ID specified. Connection aborted.");
+	    System.out.println("Please enter your login ID");
+		System.exit(1);
     }
     try{
-      port = Integer.parseInt(args[0]);
+      port = Integer.parseInt(args[1]);
     }
     catch(ArrayIndexOutOfBoundsException e){
       port = DEFAULT_PORT;
     }
     try{
-    	host = args[1];
+    	host = args[2];
       }
       catch(ArrayIndexOutOfBoundsException e){
     	host = "localhost";
