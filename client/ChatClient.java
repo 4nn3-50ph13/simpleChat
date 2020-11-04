@@ -119,40 +119,42 @@ public class ChatClient extends AbstractClient
 		  if (message.contains("#")) {
 			  getCommand(message.substring(message.indexOf("#")));
 		  }
+	  } else {
+		  treatCommand(command, null);
 	  }
   }
   
   private void treatCommand(String command, String message) {
-	  if(command.equals("quit")) {
+	  if(command.equals("#quit")) {
 		  quit();
-	  } else if(command.equals("logoff")) {
+	  } else if(command.equals("#logoff")) {
 		  try
 		    {
 		      closeConnection();
 		    }
 		    catch(IOException e) {}
 		    
-	  } else if(command.equals("sethost")) {
-		    if(!isConnected()) {
+	  } else if(command.equals("#sethost")) {
+		    if(!isConnected() && message != null) {
 		    	setHost(message);
 		    } else {
 		    	System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOON grrr");
 		    }
-	  } else if(command.equals("setport")) {
-		  if(!isConnected()) {
+	  } else if(command.equals("#setport")) {
+		  if(!isConnected() && message != null) {
 		    	setPort(Integer.parseInt(message));
 		    } else {
 		    	System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOON grrr");
 		    }
-	  } else if(command.equals("login")) {
+	  } else if(command.equals("#login")) {
 		  try {
 			openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	  } else if(command.equals("gethost")) {
+	  } else if(command.equals("#gethost")) {
 		  System.out.println(getHost());
-	  } else if(command.equals("getport")) {
+	  } else if(command.equals("#getport")) {
 		  System.out.println(getHost());
 	  }
   }
