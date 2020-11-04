@@ -114,6 +114,8 @@ public class ClientConsole implements ChatIF {
 	String loginID = null;
     String host = "";
     int port;
+    
+    System.out.println("Please enter your login ID");
     Scanner logID = new Scanner(System.in); 
 
     try{
@@ -123,6 +125,7 @@ public class ClientConsole implements ChatIF {
     	} else {
     		client.quit();
     	}
+    	logID.close();
     }
     catch(ArrayIndexOutOfBoundsException e){
       client.quit();

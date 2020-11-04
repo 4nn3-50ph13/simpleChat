@@ -68,7 +68,7 @@ public class ServerConsole implements ChatIF{
 			port = DEFAULT_PORT;
 		}
 		
-		ClientConsole chat= new ClientConsole(host, port);
+		ServerConsole chat= new ServerConsole(host, port);
 		chat.accept();  //Wait for console data
 	}
 }

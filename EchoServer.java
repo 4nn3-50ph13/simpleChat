@@ -3,6 +3,8 @@
 // license found at www.lloseng.com 
 
 import java.io.*;
+import java.util.Scanner;
+
 import ocsf.server.*;
 
 /**
@@ -24,6 +26,8 @@ public class EchoServer extends AbstractServer
    */
   final public static int DEFAULT_PORT = 5555;
   
+  Boolean isFirstConnection;
+  
   //Constructors ****************************************************
   
   /**
@@ -34,6 +38,7 @@ public class EchoServer extends AbstractServer
   public EchoServer(int port) 
   {
     super(port);
+    isFirstConnection = true;
   }
 
   
@@ -46,7 +51,28 @@ public class EchoServer extends AbstractServer
    * @param client The connection from which the message originated.
    */
   public void handleMessageFromClient (Object msg, ConnectionToClient client) {
-    System.out.println("Message received: " + msg + " from " + client);
+	  Scanner logID = new Scanner(System.in); 
+	  String loginID = null;
+
+	  loginID = logID.nextLine();
+	  
+	  if(isFirstConnection) {
+		  if(loginID.length() > 6 && loginID.substring(0, 6).equals("#login") ) {
+			  loginID = loginID.substring(6);
+			  client.setInfo("Login ID", loginID);
+			  isFirstConnection = false;
+		  }
+		  logID.close();
+	  } else if (loginID.length() > 6 && loginID.substring(0, 6).equals("#login") ) {
+		  System.out.println("ERROR : User already logged in, improper command.\nTerminating client.");
+		  try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	  }
+	  
+    System.out.println("Message received: " + msg + " from " + client.getInfo("Login ID"));
     this.sendToAllClients(msg);
   }
     
